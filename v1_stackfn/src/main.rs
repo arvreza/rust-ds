@@ -12,6 +12,14 @@ fn main() {
     println!("tail recursion fact(4) is {}", factorial_tail(4, 1));
 }
 
+/*
+fac 4
+4 * fac (3)
+4 * ( 3 * fac (2))
+4 * ( 3 * (2 * fac(1)))
+4 * ( 3 * (2 * 1))
+...
+*/
 fn factorial(n:i32) -> i32 {
     if n <= 1 {
         return 1;
@@ -19,6 +27,12 @@ fn factorial(n:i32) -> i32 {
     n * factorial(n-1)
 }
 
+/*
+fac 4, 1
+fac 3, 4 =>  (4 - 1) (1 * 4)
+fac 2, 12 => (3 - 1) (3 * 4)
+fac 1, 24 => (1 * 24)
+*/
 fn factorial_tail(n:i32, r:i32) -> i32 {
     if n <= 1 {
         return r;
