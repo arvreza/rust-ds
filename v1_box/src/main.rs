@@ -38,4 +38,20 @@ fn main() {
     println!("v.len = {}, capacity = {}", v.len(), v.capacity());
 
     println!("Our list is equal: {:?}", list);
+
+    let s = " hello! ".to_string();
+    let p = s.trim();
+    println!("p = '{}', and s string exist = '{}'", p, s);
+    let fstr = "help me find home";
+
+    println!("{}", string_find_f(fstr));
+}
+
+fn string_find_f(s: &str) -> &str {
+    for (n, x) in s.char_indices() {
+        if x == 'f' {
+            return &s[n..];
+        }
+    }
+    s
 }
