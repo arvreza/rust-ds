@@ -19,6 +19,6 @@ fn main() {
     println!("Area of {:?} is {:?}", rec1, rec1.area());
 }
 
-fn area(rectangle: &Rectangle) -> u32 {
-    rectangle.width * rectangle.height
-}
+// fn area(rectangle: &Rectangle) -> u32 {
+//     rectangle.width * rectangle.height
+// }

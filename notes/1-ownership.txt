@@ -1,3 +1,4 @@
+- ownership concept allows rust to not need garbage collection. 
 - all data stored in stack must have known/fixed size 
 - heap is less organized when you want to add data to heap you request the size of it as well
     - memory allocator find an empty spot in the heap to match with the size you requested, and returns a pointer to the allocated memory.
@@ -8,25 +9,122 @@ Ownership rules:
 2- There can be only one owner at the time
 3- when the owner goes out of scope the value will be dropped
 ------------------------------------
+stack vs heap
+- both are parts of the memory available to our code to use at runtime
+- stack data is ordered (last in, first out), therefore the size of the data stored on it should be known in advance.
+- heap is less organized, when you put data in heap you can request a certain amount of space. the memory allocator finds a space for you and store the data and return a pointer to the location of the data. 
+- the above process is called allocating on heap. 
+- because the pointer is a fixed size, you can store the pointer on stack. but when you need the actual data then you need to follow the pointer.
+- adding data to stack is fast, because you don't need to look for a free memory location and instead just add the fixed size on the top of the stack.
+- similarly accessing data in heap is slower than stack. For stack you just have one option and that is the top of the stack. 
+- when your code calls a function, the values passed to the function and the functions local variables get pushed to the stack, when the function is over those value gets popped off the stack. 
+
+
+
+------------------------------------
+Variables scope:
+- the range in program which sn item is valid (kind of similar to C program)
+- when the variable goes out of scope the value will be dropped and the memory will be released
+------------------------------------
 String: 
 1- string literals are not of type String
 2- let s = String::from("Hello") <- this creates a String object from string literals
 (:: or double colon operator is method syntax)
-3- String can be mutated by literals cannot.
+3- String can be mutated but literals cannot.
 -------------------------
 Memory allocation:
 1- Shallow copy, when we copy pointer value and it points to same address in heap (C# or Java)
 2- Deep Copy, when we copy the value and we have two version of the value in the heap (C++)
 3- Move, when we have two pointer, but first one lost context (Rust)
 
-Rust can mimic deep copy through Clone()
-
+stack copy:
 let x = 5;
 let y = x;
-in the above code since it is integer, and it happens in stack the value gets copied, which is super fast.
+in the above code since it is integer, and it happens in stack the value gets copied, which is super fast. 
+So in the above code x is still valid, because it is an integer and its value is stored entirely in stack.
 
-"str" is also defined on stack 
-------------
+"str" is also defined on stack
+
+Rust can mimic deep copy through Clone()
+for true clone we need to use built-in functions:
+let s1 = String::from("hello world");
+let s2 = s1.clone(); 
+---------------------
 Ownership and functions:
 The semantics for passing a value to a function are similar to those for assigning a value to a variable. 
 Passing a variable to a function will move or copy, just as assignment does.
+
+fn main() {
+    let s = String::from("hello");  // s comes into scope
+
+    takes_ownership(s);             // s's value moves into the function...
+                                    // ... and so is no longer valid here
+
+    let x = 5;                      // x comes into scope
+
+    makes_copy(x);                  // x would move into the function,
+                                    // but i32 is Copy, so it's okay to still
+                                    // use x afterward
+
+} // Here, x goes out of scope, then s. But because s's value was moved, nothing
+  // special happens.
+
+fn takes_ownership(some_string: String) { // some_string comes into scope
+    println!("{}", some_string);
+} // Here, some_string goes out of scope and `drop` is called. The backing
+  // memory is freed.
+
+fn makes_copy(some_integer: i32) { // some_integer comes into scope
+    println!("{}", some_integer);
+} // Here, some_integer goes out of scope. Nothing special happens.
+
+---------------------
+Return values and scope 
+
+returning value can transfer the ownership.
+
+fn main() {
+    let s1 = gives_ownership();         // gives_ownership moves its return
+                                        // value into s1
+
+    let s2 = String::from("hello");     // s2 comes into scope
+
+    let s3 = takes_and_gives_back(s2);  // s2 is moved into
+                                        // takes_and_gives_back, which also
+                                        // moves its return value into s3
+} // Here, s3 goes out of scope and is dropped. s2 was moved, so nothing
+  // happens. s1 goes out of scope and is dropped.
+
+fn gives_ownership() -> String {             // gives_ownership will move its
+                                             // return value into the function
+                                             // that calls it
+
+    let some_string = String::from("yours"); // some_string comes into scope
+
+    some_string                              // some_string is returned and
+                                             // moves out to the calling
+                                             // function
+}
+
+// This function takes a String and returns one
+fn takes_and_gives_back(a_string: String) -> String { // a_string comes into
+                                                      // scope
+
+    a_string  // a_string is returned and moves out to the calling function
+}
+
+Rust does let us return multiple values using a tuple
+
+fn main() {
+    let s1 = String::from("hello");
+
+    let (s2, len) = calculate_length(s1);
+
+    println!("The length of '{}' is {}.", s2, len);
+}
+
+fn calculate_length(s: String) -> (String, usize) {
+    let length = s.len(); // len() returns the length of a String
+
+    (s, length)
+}
