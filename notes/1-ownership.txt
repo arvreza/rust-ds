@@ -1,0 +1,32 @@
+- all data stored in stack must have known/fixed size 
+- heap is less organized when you want to add data to heap you request the size of it as well
+    - memory allocator find an empty spot in the heap to match with the size you requested, and returns a pointer to the allocated memory.
+    - this process is called allocating on the heap
+----------------------------------
+Ownership rules:
+1- Each value has a variable that is called its owner
+2- There can be only one owner at the time
+3- when the owner goes out of scope the value will be dropped
+------------------------------------
+String: 
+1- string literals are not of type String
+2- let s = String::from("Hello") <- this creates a String object from string literals
+(:: or double colon operator is method syntax)
+3- String can be mutated by literals cannot.
+-------------------------
+Memory allocation:
+1- Shallow copy, when we copy pointer value and it points to same address in heap (C# or Java)
+2- Deep Copy, when we copy the value and we have two version of the value in the heap (C++)
+3- Move, when we have two pointer, but first one lost context (Rust)
+
+Rust can mimic deep copy through Clone()
+
+let x = 5;
+let y = x;
+in the above code since it is integer, and it happens in stack the value gets copied, which is super fast.
+
+"str" is also defined on stack 
+------------
+Ownership and functions:
+The semantics for passing a value to a function are similar to those for assigning a value to a variable. 
+Passing a variable to a function will move or copy, just as assignment does.

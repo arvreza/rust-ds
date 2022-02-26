@@ -1,0 +1,17 @@
+Another data type that does not have ownership is the slice. 
+Slices let you reference a contiguous sequence of elements in a collection rather than the whole collection.
+
+    let s = String::from("hello world");
+
+    let hello = &s[0..5];
+    let world = &s[6..11];
+This is similar to taking a reference to the whole String but with the extra [0..5] bit. 
+Rather than a reference to the entire String, it’s a reference to a portion of the String.
+
+let s = String::from("hello");
+
+let len = s.len();
+
+let slice = &s[0..len];
+let slice = &s[..];
+//same syntax
