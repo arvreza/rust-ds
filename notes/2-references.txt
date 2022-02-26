@@ -1,0 +1,23 @@
+Consider the following code:
+
+    let s1 = String::from("hello");
+
+    let len = calculate_length(&s1);
+
+The &s1 syntax lets us create a reference that refers to the value of s1 but does not own it.
+
+fn calculate_length(s: &String) -> usize { // s is a reference to a String
+    s.len()
+} // Here, s goes out of scope. But because it does not have ownership of what
+  // it refers to, nothing happens.
+
+  We call having references as function parameters borrowing.
+
+  You can only have one mutable reference to a data. (one write)
+
+The Rules of References:
+------------------------------------
+
+(1)At any given time, you can have either one mutable reference or any number of immutable references.
+(2)References must always be valid.
+
