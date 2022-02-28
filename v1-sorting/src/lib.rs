@@ -31,29 +31,29 @@ pub fn merge_sort<T: PartialOrd + Debug> (mut v: Vec<T>) -> Vec<T> {
     //merge
     let mut a_it = a.into_iter();
     let mut b_it = b.into_iter();
-    let mut a_peek = a_it.next();
-    let mut b_peek = b_it.next();
+    let mut a_next = a_it.next();
+    let mut b_next = b_it.next();
 
     loop {
-        match a_peek  {
-            Some(ref a_val) => match b_peek {
+        match a_next  {
+            Some(ref a_val) => match b_next {
                 Some(ref b_val) => {
                     if b_val < a_val {
-                        res.push(b_peek.take().unwrap());
-                        b_peek = b_it.next();
+                        res.push(b_next.take().unwrap());
+                        b_next = b_it.next();
                     } else {
-                        res.push(a_peek.take().unwrap());
-                        a_peek = a_it.next();
+                        res.push(a_next.take().unwrap());
+                        a_next = a_it.next();
                     }
                 }
                 None => {
-                    res.push(a_peek.take().unwrap());
+                    res.push(a_next.take().unwrap());
                     res.extend(a_it);
                     return res;
                 }
             },
             None => {
-                if let Some(b_val) = b_peek {
+                if let Some(b_val) = b_next {
                     res.push(b_val)
                 }
                 res.extend(b_it);
